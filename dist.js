@@ -13249,6 +13249,8 @@ var react = require_server();
 var html = fs.readFileSync("./content.html", "utf8");
 var vdom = require_content();
 var suite = new benchmark.Suite();
+var reactResult = react.renderToString(vdom);
+var mustacheResult = mustache.render(html, {});
 suite.add("React VDOM", function() {
   react.renderToString(vdom);
 }).add("Mustache", function() {
@@ -13260,6 +13262,7 @@ suite.add("React VDOM", function() {
   console.log(String(event.target));
 }).on("complete", function() {
   console.log("Fastest is " + this.filter("fastest").map("name"));
+  console.log(`React is rendering ${(100 * reactResult.length / mustacheResult.length).toFixed(2)}% of the HTML that Mustache is rendering`);
 }).run();
 /*
 object-assign
